@@ -1,4 +1,5 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import { ServerMessages } from "../common/types";
 import { Document } from "../Document/document.model";
 import { Bid } from "./bid.model";
 import { CustomRequest } from "./types";
@@ -6,37 +7,36 @@ import { CustomRequest } from "./types";
 export class BidController {
   static async createBid (req:CustomRequest, res:Response) {
     try {
-        //FIND DUPLICATE DOC
-        const findDublicateDoc = await Document.findOne({where: {title: req.body.document_title}})
-        if (findDublicateDoc) {
-          const findDublicateBid = await Bid.findOne({where: {user_id: req.body.user_id, document_id: findDublicateDoc.id}})
-
-          //FIND DUBLICATE BID
-          if(findDublicateBid) return res.json({message: 'вы уже заявляли', findDublicateBid})
-
-          //CREATE BID
+        const findDocument = await Document.findOne({where: {title: req.body.document_title}})
+        
+        if (!findDocument) {
+          const createNewDocument = await Document.create({
+            title: req.body.document_title
+          })
           await Bid.create({
             user_id: req.body.user_id,
-            document_id: findDublicateDoc.id
+            document_id: createNewDocument.id
           })
-          await Document.increment({count_bids: 1}, {where: {id: findDublicateDoc.id}})
-
-          return res.json({message: 'заявка создана'})
+          await Document.increment({count_bids: 1}, {where: {id: createNewDocument.id}})
+          return res.json({ message: ServerMessages.bidSuccess})
         }
 
-        //CREATE NEW DOC AND BID
-        const newDocument = await Document.create({
-          title: req.body.document_title
-        })
+        const findDuplicateBid = await Bid.findOne({where: {user_id: req.body.user_id, document_id: findDocument.id}})
+
+        if(findDuplicateBid) return res.status(400).json({message: ServerMessages.bidDuplicate})
+
         await Bid.create({
           user_id: req.body.user_id,
-          document_id: newDocument.id
+          document_id: findDocument.id
         })
-        await Document.increment({count_bids: 1}, {where: {id: newDocument.id}})
-        return res.json({message: 'заявка создана'})
+
+        await Document.increment({count_bids: 1}, {where: {id: findDocument.id}})
+
+        return res.json({message: ServerMessages.bidSuccess})
+
     } catch (e) {
       console.log(e)
-      return res.json({message: 'Server error'}) 
+      return res.status(500).json({message: ServerMessages.serverErr}) 
     }
   }
 }

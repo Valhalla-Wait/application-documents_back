@@ -1,5 +1,4 @@
 import { DataTypes } from "sequelize";
-import { Bid } from "../Bid/bid.model";
 import { sequelize } from "../db";
 import { UserI } from "./types";
 
