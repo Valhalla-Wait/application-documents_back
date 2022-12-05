@@ -8,7 +8,6 @@ export class DocumentController {
         const documents = await Document.findAll()
         return res.json(documents)
     } catch (e) {
-      console.log(e)
      return res.status(500).json({message: ServerMessages.serverErr}) 
     }
   }

@@ -35,7 +35,6 @@ export class BidController {
         return res.json({message: ServerMessages.bidSuccess})
 
     } catch (e) {
-      console.log(e)
       return res.status(500).json({message: ServerMessages.serverErr}) 
     }
   }

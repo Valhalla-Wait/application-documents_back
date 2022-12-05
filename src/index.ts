@@ -19,8 +19,6 @@ app.use('/api/bids', bidRouter)
 
 const start = async () => {
   try {
-    console.log(PORT)
-    await sequelize.authenticate()
     app.listen(PORT, () => {
       console.log('Server run')
     })
