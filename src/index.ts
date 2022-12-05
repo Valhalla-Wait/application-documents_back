@@ -1,9 +1,11 @@
 import express, {Express} from 'express'
 import { bidRouter } from './Bid/bid.router';
 import { sequelize } from './db';
+import dotenv from 'dotenv'
 import { documentRouter } from './Document/document.router';
 import { corsMiddleware } from './middleware/cors.middleware';
 import { userRouter } from './User/user.router';
+dotenv.config()
 
 const PORT = process.env.PORT || 8000
 
@@ -17,6 +19,7 @@ app.use('/api/bids', bidRouter)
 
 const start = async () => {
   try {
+    console.log(PORT)
     await sequelize.authenticate()
     app.listen(PORT, () => {
       console.log('Server run')
