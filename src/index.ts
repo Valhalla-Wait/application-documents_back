@@ -1,6 +1,5 @@
 import express, {Express} from 'express'
 import { bidRouter } from './Bid/bid.router';
-import { sequelize } from './db';
 import dotenv from 'dotenv'
 import { documentRouter } from './Document/document.router';
 import { corsMiddleware } from './middleware/cors.middleware';

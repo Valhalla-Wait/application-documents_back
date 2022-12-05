@@ -8,6 +8,7 @@ export class UserController {
         const users = await User.findAll() 
         return res.json(users)
     } catch (e) {
+      console.log(e)
      return res.status(500).json({message: ServerMessages.serverErr}) 
     }
   }
