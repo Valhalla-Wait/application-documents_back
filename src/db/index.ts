@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-export const sequelize = new Sequelize('bids', 'valhalla', 'ifvIAj9ZEpfszrSvJeOK8eTHVu3Rnm6W', {
-  host: 'dpg-ce6akrda4991ueuo5uf0-a',
+export const sequelize = new Sequelize('application_doc', 'postgres', 'admin', {
+  host: 'localhost',
   dialect: 'postgres'
 });
